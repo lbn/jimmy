@@ -1,5 +1,5 @@
 gym:
-    - date:         2015-06-02
+    - date:         2015-06-02T09:00:00Z
       exercises:
         - name:         Squat
           sets:
@@ -86,7 +86,7 @@ gym:
                     
             
             
-    - date:         2015-06-05
+    - date:         2015-06-05T19:00:00Z
       exercises:
         - name:         Shoulder Press
           sets:

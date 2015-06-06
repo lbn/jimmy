@@ -5,3 +5,4 @@ authors = ["Lee Archer <la12808@my.bristol.ac.uk>"]
 
 [dependencies]
 yaml-rust = "*"
+chrono = "*"
