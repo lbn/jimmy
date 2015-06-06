@@ -1,0 +1,119 @@
+gym:
+    - date:         2015-06-02
+      exercises:
+        - name:         Squat
+          sets:
+            - reps:         10
+              weight:       40
+
+            - reps:         8
+              weight:       60
+
+            - reps:         6
+              weight:       70
+
+            - reps:         5
+              weight:       80
+
+            - reps:         5
+              weight:       90
+
+            - reps:         5
+              weight:       100
+
+            
+        - name:         Bench
+          sets:
+            - reps:         10
+              weight:       40
+
+            - reps:         8
+              weight:       50
+
+            - reps:         6
+              weight:       60
+
+            - reps:         5
+              weight:       70
+
+            - reps:         5
+              weight:       80
+
+            - reps:         3
+              weight:       90
+            
+            
+        - name:         Barbell Row
+          sets:
+            - reps:         10
+              weight:       50
+
+            - reps:         8
+              weight:       55
+
+            - reps:         6
+              weight:       60
+
+            - reps:         5
+              weight:       65
+
+            - reps:         5
+              weight:       70
+
+            
+        - name:         Preacher Curl
+          sets:
+            - reps:         10
+              weight:       30
+
+            - reps:         10
+              weight:       30
+
+            - reps:         10
+              weight:       30
+
+            
+        - name:         Tricep Extention
+          sets:
+            - reps:         10
+              weight:       30
+
+            - reps:         10
+              weight:       30
+
+            - reps:         10
+              weight:       30
+                    
+            
+            
+    - date:         2015-06-05
+      exercises:
+        - name:         Shoulder Press
+          sets:
+            - reps:         10
+              weight:       20
+            
+            - reps:         8
+              weight:       30
+            
+            - reps:         6
+              weight:       40
+            
+            - reps:         5
+              weight:       50
+            
+            
+        - name:         Deadlift
+          sets:
+            - reps:         8
+              weight:       80
+            
+            - reps:         6
+              weight:       100
+            
+            - reps:         5
+              weight:       120
+            
+            - reps:         5
+              weight:       140
+

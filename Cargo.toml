@@ -1,0 +1,7 @@
+[package]
+name = "gym"
+version = "0.1.0"
+authors = ["Lee Archer <la12808@my.bristol.ac.uk>"]
+
+[dependencies]
+yaml-rust = "*"
