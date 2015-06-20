@@ -150,3 +150,14 @@ fn main() {
     let gym = Gym::new(&args[1]);
     gym.print();
 }
+
+
+#[cfg(test)]
+mod tests {
+
+    #[test]
+    fn get_pre() {
+        assert_eq!("", super::get_pre(0));
+        assert_eq!("  ", super::get_pre(1));
+    }
+}
