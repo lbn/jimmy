@@ -7,9 +7,6 @@ use std::fs::File;
 use std::io::prelude::*;
 use yaml_rust::yaml;
 
-//use chrono::*;
-
-
 // Set
 struct Set {
     reps:   u8,
@@ -97,25 +94,50 @@ impl Day {
     }
 }
 
-fn get_docs() -> Vec<yaml_rust::yaml::Yaml> {
-    let args: Vec<_> = env::args().collect();
-    let mut gym_yamls = String::new();
 
-    let mut gym_file = match File::open(&args[1]) {
-        Ok(f) => f,
-        Err(why) => panic!("Cannot open file: {}", why)
-    };
+// Gym
+struct Gym {
+    days: Vec<Day>,
+    file: File
+}
 
-    match gym_file.read_to_string(&mut gym_yamls) {
-        Ok(s) => s,
-        Err(why) => panic!("Cannot read file: {}", why)
-    };
 
-    let docs = match yaml::YamlLoader::load_from_str(&gym_yamls) {
-        Ok(s) => s,
-        Err(why) => panic!("Cannot parse file: {:?}", why)
-    };
-    docs
+impl Gym {
+    fn new(filename: &str) -> Gym {
+        let mut gym_yamls = String::new();
+
+        let mut gym_file = match File::open(filename) {
+            Ok(f) => f,
+            Err(why) => panic!("Cannot open file: {}", why)
+        };
+
+        match gym_file.read_to_string(&mut gym_yamls) {
+            Ok(s) => s,
+            Err(why) => panic!("Cannot read file: {}", why)
+        };
+
+        let docs = match yaml::YamlLoader::load_from_str(&gym_yamls) {
+            Ok(s) => s,
+            Err(why) => panic!("Cannot parse file: {:?}", why)
+        };
+
+        let doc = &docs[0];
+
+        let gym: &yaml::Yaml = &doc["gym"];
+        let gym_days = match gym.as_vec() {
+            Some(days) => days.iter().map(|day| Day::new(&day)).collect::<Vec<_>>(),
+            None       => panic!("Gym days is not an array")
+        };
+
+
+        Gym { days: gym_days, file: gym_file }
+    }
+    fn print(self) {
+        println!("Gym days found: {}", self.days.len());
+        for day in self.days {
+            day.print();
+        }
+    }
 }
 
 fn get_pre(level: u8) -> String {
@@ -123,21 +145,8 @@ fn get_pre(level: u8) -> String {
 }
 
 
-fn print_gym(gym_days: &Vec<yaml::Yaml>) {
-    println!("Gym days found: {}", gym_days.len());
-    for gym_day in gym_days {
-        Day::new(gym_day).print();
-    }
-}
-
 fn main() {
-    let docs = get_docs();
-    let doc = &docs[0];
-
-    let gym: &yaml::Yaml = &doc["gym"];
-    let gym_days = match gym.as_vec() {
-        Some(days) => days,
-        None       => panic!("Gym days is not an array")
-    };
-    print_gym(gym_days);
+    let args: Vec<_> = env::args().collect();
+    let gym = Gym::new(&args[1]);
+    gym.print();
 }
