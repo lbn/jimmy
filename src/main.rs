@@ -7,6 +7,8 @@ use std::fs::File;
 use std::io::prelude::*;
 use yaml_rust::yaml;
 
+use std::io;
+
 // Set
 struct Set {
     reps:   u8,
@@ -27,6 +29,30 @@ impl Set {
 
         Set {reps: reps, weight: weight}
     }
+
+    fn input() -> Option<Set> {
+        println!("{}= New set =", get_pre(5));
+        let mut stdin = io::stdin();
+        println!("Weight: ");
+        let mut weight = String::new();
+        stdin.read_line(&mut weight).ok().expect("Cannot get field");
+        if weight.trim() == "x" {
+            return None
+        }
+        let weight: u16 = weight.trim().parse().ok().expect("Be a number");
+
+        println!("Reps: ");
+        let mut reps = String::new();
+        stdin.read_line(&mut reps).ok().expect("Cannot get field");
+        if reps.trim() == "x" {
+            return None
+        }
+        let reps: u8 = reps.trim().parse().ok().expect("Be a number");
+
+        println!("{}= End of set =", get_pre(5));
+        Some(Set {reps: reps, weight: weight})
+    }
+
     fn print(self) {
         println!("{}{} reps - {}kg", get_pre(3), self.reps, self.weight);
     }
@@ -48,8 +74,29 @@ impl Exercise {
             Some(s) => s.iter().map(|set| Set::new(&set)).collect::<Vec<_>>(),
             None    => panic!("No sets for an exercise")
         };
-        //let sets = vec![Set {reps: 5, weight: 200}];
         Exercise {name: name.to_string(), sets: sets}
+    }
+    fn input() -> Option<Exercise> {
+        println!("{}= New exercise =", get_pre(5));
+        let mut stdin = io::stdin();
+        println!("Name: ");
+        let mut name = String::new();
+        stdin.read_line(&mut name).ok().expect("Cannot read value");
+        if name.trim() == "x" {
+            return None
+        }
+
+
+        let mut sets = Vec::new();
+        loop {
+            match Set::input() {
+                Some(s) => sets.push(s),
+                None => break
+            }
+        }
+
+        println!("{}= End of exercise =", get_pre(5));
+        Some(Exercise {name: name, sets: sets})
     }
 
     fn print(self) {
@@ -74,7 +121,7 @@ impl Day {
             None    => panic!("No date for a gym day")
         };
 
-        let date2 = match chrono::DateTime::parse_from_rfc3339(date) {
+        let date = match chrono::DateTime::parse_from_rfc3339(date) {
             Ok(s)   => s,
             Err(_)=> panic!("Cannot parse date for a gym day ({})", date)
         };
@@ -83,7 +130,32 @@ impl Day {
             Some(s) => s.iter().map(|e| Exercise::new(&e)).collect::<Vec<_>>(),
             None    => panic!("No exercises for a gym day ({})", date)
         };
-        Day {date: date2, exercises: exercises}
+        Day {date: date, exercises: exercises}
+    }
+    fn input() -> Option<Day> {
+        let mut stdin = io::stdin();
+        println!("{}= New gym day =", get_pre(5));
+        println!("Date: ");
+        let mut date = String::new();
+        stdin.read_line(&mut date).ok().expect("Cannot read value");
+        if date.trim() == "x" {
+            return None
+        }
+
+        let date = match chrono::DateTime::parse_from_rfc3339(&date.trim()) {
+            Ok(s)   => s,
+            Err(_)=> panic!("Cannot parse date for a gym day ({})", date)
+        };
+
+        let mut exercises = Vec::new();
+        loop {
+            match Exercise::input() {
+                Some(s) => exercises.push(s),
+                None => break
+            }
+        }
+        println!("{}= End of gym day =", get_pre(5));
+        Some(Day {date: date, exercises: exercises})
     }
     fn print(self) {
         println!("{}Date: {}", get_pre(1), self.date);
@@ -145,10 +217,13 @@ fn get_pre(level: u8) -> String {
 }
 
 
+
 fn main() {
-    let args: Vec<_> = env::args().collect();
-    let gym = Gym::new(&args[1]);
-    gym.print();
+    //let args: Vec<_> = env::args().collect();
+    //let gym = Gym::new(&args[1]);
+    //gym.print();
+
+    let day = Day::input();
 }
 
 
