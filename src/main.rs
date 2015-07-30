@@ -1,11 +1,14 @@
 extern crate yaml_rust;
 extern crate chrono;
+extern crate getopts;
 
 use std::env;
 use std::fs::File;
 
 use std::io::prelude::*;
 use yaml_rust::yaml;
+
+use getopts::Options;
 
 // Set
 struct Set {
@@ -144,9 +147,51 @@ fn get_pre(level: u8) -> String {
     std::iter::repeat(" ").take((level as usize)*2).collect::<String>()
 }
 
+fn print_usage(program: &str, opts: Options) {
+    let brief = format!("Usage: {} FILE [options]", program);
+    print!("{}", opts.usage(&brief));
+}
+
 
 fn main() {
     let args: Vec<_> = env::args().collect();
-    let gym = Gym::new(&args[1]);
-    gym.print();
+    let program = args[0].clone();
+    let mut opts = Options::new();
+    opts.optopt("i", "in", "gym log file", "NAME");
+    opts.optflag("h", "help", "print this help menu");
+    let matches = match opts.parse(&args[1..]) {
+        Ok(m) => m,
+        Err(f) => { panic!(f.to_string()) }
+    };
+
+    if matches.opt_present("h") {
+        print_usage(&program, opts);
+        return;
+    }
+
+    let gym_filename = match matches.opt_str("i") {
+        Some(x) => x,
+        None => {
+            print_usage(&program, opts);
+            return;
+        }
+    };
+
+    let input = if !matches.free.is_empty() {
+        matches.free[0].clone()
+    } else {
+        print_usage(&program, opts);
+        return;
+    };
+
+    if input == "print" {
+        let gym = Gym::new(&gym_filename);
+        gym.print();
+    } else if input == "edit" {
+    } else {
+        print_usage(&program, opts);
+        return;
+    }
+
+
 }
